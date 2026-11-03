@@ -24,7 +24,7 @@ class TouiteurRepository {
 
     // Fonctionnalités 4
     // Affiches les touites d'un utilisateur donnee
-    public function  (int $id) : array {
+    public function TouiteSelonUtil(int $id) : array {
         // Requete sql permettant d'avoir tout les touites selon l'id de l'utilisateur
         $sql = "SELECT t.texte,t.date_publication, u.nom, u.prenom FROM Touite t JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur 
         WHERE t.id_auteur = :id ORDER BY t.date_publication DESC";
