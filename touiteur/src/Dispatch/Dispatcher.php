@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\touiteur\dispatch;
+namespace iutnc\touiteur\Dispatch;
 
 class Dispatcher{
     private $action;

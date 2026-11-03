@@ -29,9 +29,11 @@ class TouiteurRepository {
         $sql = "SELECT t.texte,t.date_publication, u.nom, u.prenom FROM Touite t JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur 
         WHERE t.id_auteur = :id ORDER BY t.date_publication DESC";
 
+        // Ca lance la requete avec l'id en param
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
 
+        // 
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
         $touites = [];
