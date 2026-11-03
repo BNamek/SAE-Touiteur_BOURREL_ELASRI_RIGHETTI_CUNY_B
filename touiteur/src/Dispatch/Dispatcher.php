@@ -16,7 +16,7 @@ class Dispatcher{
         }
     }
 
-    //Methode qui lance
+    //Methode qui lance l'action qui vas se produire selon la classe
     public function run():void{
         //Si l'action dans le tableau existe et qu'il a une route vers sa classe crée
         if(array_key_exists($this -> action,$this -> route)){
@@ -56,8 +56,6 @@ class Dispatcher{
         <a href="?action=default">Acceuil</a>
         <br>
         <a href="?action=add-user">Se connecter</a>
-        <br>
-        <a href="?action=add-track">Ajouter un podcast ou une musique a la playlist</a>
         <br>'.$html.'</body> </html>';
     }
 }
