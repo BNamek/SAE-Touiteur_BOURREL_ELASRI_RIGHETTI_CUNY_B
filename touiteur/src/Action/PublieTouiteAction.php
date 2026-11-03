@@ -1,10 +1,11 @@
 <?php
 namespace iutnc\touiteur\Action;
 
+use iutnc\touiteur\action\ActionAbs;
 use iutnc\touiteur\BD\TouiteurRepository;
 use iutnc\touiteur\touite\Touite;
 
-class PublieTouiteAction extends Action {
+class PublieTouiteAction extends ActionAbs {
 
     public function execute(): string {
         // 1. Affichage du formulaire en GET

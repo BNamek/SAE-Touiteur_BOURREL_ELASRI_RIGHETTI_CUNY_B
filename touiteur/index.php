@@ -13,7 +13,7 @@ ConnectionBD::setConfig('config/db.config.ini');
 // On crée le dispatcher et on lui donne les routes
 $dispatcher = new Dispatcher();
 $dispatcher->addRoute('default', DefaultAction::class);
-$dispatcher->addRoute('publish-touite', PublishTouiteAction::class);
+$dispatcher->addRoute('publie-touite', PublieTouiteAction::class);
 
 // On lance l'action demandée dans l'URL
 $dispatcher->run();
