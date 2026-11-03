@@ -24,19 +24,21 @@ class TouiteurRepository {
     // Méthodes liées à la BD
     
     public function insertTouite(Touite $t): int {
-        $sql = "INSERT INTO Touite (texte, id_auteur, date_publi, note) VALUES (:texte, :auteur, :date_publi, :note)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            ':texte'      => $t->getTexte(),
-            ':auteur'     => $t->getIdAuteur(),
-            ':date_publi' => $t->getDatePublication(),
-            ':note'       => $t->getNote()
-        ]);
+    $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note) 
+            VALUES (:texte, :date_publication, :auteur, :note)";
+            
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([
+        ':texte'            => $t->getTexte(),
+        ':date_publication' => $t->getDatePublication(),
+        ':auteur'           => $t->getIdAuteur(),
+        ':note'             => $t->getNote()
+    ]);
 
-        $id = (int)$this->pdo->lastInsertId();
-        $t->setId($id);
-        return $id;
-    }
+    $id = (int)$this->pdo->lastInsertId();
+    $t->setId($id);
+    return $id;
+}
 
 
 }
