@@ -1,5 +1,4 @@
 {
-    "name": "elasr/src",
     "autoload": {
         "psr-4": {
             "iutnc\\touiteur\\": "src/"
