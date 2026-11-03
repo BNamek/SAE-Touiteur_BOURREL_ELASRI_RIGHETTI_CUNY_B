@@ -16,7 +16,7 @@ $dispatcher->addRoute('default', DefaultAction::class);
 //on ajoute la route qui permet d'acceder à l'action de publication d'un touite
 $dispatcher->addRoute(
     'publier-touite',
-    \iutnc\touiteur\action\PublierTouiteAction::class
+    \iutnc\touiteur\Action\PublierTouiteAction::class
 );
 
 // On lance l'action demandée dans l'URL
