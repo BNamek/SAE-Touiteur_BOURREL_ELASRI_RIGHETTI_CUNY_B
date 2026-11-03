@@ -27,7 +27,7 @@ class PublieTouiteAction extends ActionAbs {
 
             return "
                 <p style='color: green; font-weight: bold;'>Votre touite a été publié avec succès !</p>
-                <p><a href='?action=default'>Retour à l'accueil</a> | <a href='?action=publish-touite'>Publier un autre touite</a></p>
+                <p><a href='?action=default'>Retour à l'accueil</a> | <a href='?action=publie-touite'>Publier un autre touite</a></p>
             ";
         } catch (\InvalidArgumentException $e) {
             return "
@@ -42,7 +42,7 @@ class PublieTouiteAction extends ActionAbs {
         $texteHtml = htmlspecialchars($texte);
         return <<<HTML
         <h2>Publier un nouveau touite</h2>
-        <form method="POST" action="?action=publish-touite">
+        <form method="POST" action="?action=publie-touite">
             <div>
                 <label for="texte">Message (maximum 235 caractères) :</label><br>
                 <textarea id="texte" name="texte" rows="5" cols="50" maxlength="235" required>{$texteHtml}</textarea>
