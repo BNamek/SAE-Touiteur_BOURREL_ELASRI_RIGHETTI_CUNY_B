@@ -55,7 +55,7 @@ class Dispatcher{
         <br>
         <a href="?action=default">Acceuil</a>
         <br>
-        <a href="?action=publish-touite">Publier un touite</a>
+        <a href="?action=publie-touite">Publier un touite</a>
         <br>
         <a href="?action=add-user">Se connecter</a>
         <br>'.$html.'</body> </html>';
