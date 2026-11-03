@@ -2,6 +2,7 @@
 namespace iutnc\touiteur\BD;
 
 use PDO;
+use iutnc\touiteur\touite\Touite;
 
 class TouiteurRepository {
 
@@ -10,7 +11,7 @@ class TouiteurRepository {
 
     private function __construct() {
         // Récupère l'objet PDO via notre classe ConnectionBD existante
-        $this->pdo = ConnectionBD::getInstance();
+        $this->pdo = ConnectionBD::getInstance()->pdo;
     }
 
     public static function getInstance(): TouiteurRepository {
@@ -20,5 +21,22 @@ class TouiteurRepository {
         return self::$instance;
     }
 
-    // C'est ici que chacun ajoutera ses méthodes liées à la BD
+    // Méthodes liées à la BD
+    
+    public function insertTouite(Touite $t): int {
+        $sql = "INSERT INTO Touite (texte, id_auteur, date_publi, note) VALUES (:texte, :auteur, :date_publi, :note)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':texte'      => $t->getTexte(),
+            ':auteur'     => $t->getIdAuteur(),
+            ':date_publi' => $t->getDatePublication(),
+            ':note'       => $t->getNote()
+        ]);
+
+        $id = (int)$this->pdo->lastInsertId();
+        $t->setId($id);
+        return $id;
+    }
+
+
 }
