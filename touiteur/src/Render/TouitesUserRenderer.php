@@ -3,9 +3,10 @@
 namespace iutnc\touiteur\Render;
 
 use iutnc\touiteur\Action\TouitesUserAction;
+use iutnc\touiteur\BD\TouiteurRepository;
 
 class TouitesUserRenderer{
-    public function render(array $touites): string{
+    public function render(array $touites, int $idUtilisateur = 0): string{
         if (empty($touites)) {
             return "<p>Aucun touite trouvé pour cet utilisateur.</p>";
         }
@@ -21,8 +22,19 @@ class TouitesUserRenderer{
             FILTER_SANITIZE_SPECIAL_CHARS
         );
 
+        $idConnecte = $_SESSION['id_utilisateur'] ?? filter_input(INPUT_GET, 'id_suiveur', FILTER_VALIDATE_INT) ?? 1;
+        $repo = TouiteurRepository::getInstance();
+        $boutonSuivi = "";
+
+        if ($idConnecte !== $idUtilisateur) {
+            $estAbonne = $repo->estAbonneUtilisateur($idConnecte, $idUtilisateur);
+            $texte = $estAbonne ? "Ne plus suivre" : "Suivre";
+            $classe = $estAbonne ? "badge-unfollow" : "badge-follow";
+            $boutonSuivi = " <a class='{$classe}' href='?action=suivre-utilisateur&id_suivi={$idUtilisateur}'>{$texte}</a>";
+        }
+
         // Titre
-        $html = "<h2>Touites de $prenom $nom</h2>";
+        $html = "<div style='display:flex; justify-content:space-between; align-items:center; padding:10px 0;'><h2>Touites de $prenom $nom</h2><div>$boutonSuivi</div></div>";
 
         // Afficher les touites
         foreach ($touites as $touite) {
