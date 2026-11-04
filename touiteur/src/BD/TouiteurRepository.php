@@ -156,6 +156,8 @@ class TouiteurRepository {
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function estAbonneUtilisateur(int $idSuiveur, int $idSuivi): bool {
         $sql = "SELECT COUNT(*) FROM Suivi_Utilisateur
                 WHERE id_suiveur = :suiveur AND id_suivi = :suivi";
