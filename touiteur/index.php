@@ -10,6 +10,7 @@ use iutnc\touiteur\Action\PublieTouiteAction;
 use iutnc\touiteur\Action\AbonnementTagAction;
 use iutnc\touiteur\Action\ListeTouitesAction;
 use iutnc\touiteur\Action\DetailTouiteAction;
+use iutnc\touiteur\Action\SuivreUtilisateurAction;
 
 // Configuration de la base
 ConnectionBD::setConfig('config/db.config.ini');
@@ -24,6 +25,7 @@ $dispatcher->addRoute('publie-touite', PublieTouiteAction::class);
 $dispatcher->addRoute('abonnement-tag', AbonnementTagAction::class);
 $dispatcher->addRoute('touites',ListeTouitesAction::class);
 $dispatcher->addRoute('detail-touite', DetailTouiteAction::class);
+$dispatcher->addRoute('suivre-utilisateur', SuivreUtilisateurAction::class);
 
 //on ajoute la route qui permet d'acceder à l'action de publication d'un touite
 $dispatcher->addRoute('publier-touite',PublierTouiteAction::class);
