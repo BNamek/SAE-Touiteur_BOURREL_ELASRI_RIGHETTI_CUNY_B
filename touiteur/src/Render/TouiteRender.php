@@ -17,7 +17,7 @@ class TouiteRender{
         $dat = htmlspecialchars($this -> touite -> getDatePublication());
         $nom = htmlspecialchars($this -> touite -> getNom());
         $prenom = htmlspecialchars($this -> touite -> getPrenom());
-        $tex= preg_replace('/#(\w+)/','<a href="?action=touites-tag&tag=$1">#$1</a>',$tex);
+        $tex= preg_replace('/#(\w+)/','<a href="?action=tag&tag=$1">#$1</a>',$tex);
         $prenom = htmlspecialchars($this -> touite -> getprenom());
         $idtouite = htmlspecialchars($this -> touite -> getId());
 
