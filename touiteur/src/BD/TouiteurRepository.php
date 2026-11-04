@@ -146,4 +146,15 @@ class TouiteurRepository {
 
         return $res ?: null;
     }
+
+    public function getInfluenceurs() : array{
+        $sql = "SELECT u.id_utilisateur, u.nom, u.prenom, COUNT(s.id_suiveur) AS nb_abonnes FROM Utilisateur u 
+        LEFT JOIN Suivi_Utilisateur s ON u.id_utilisateur = s.id_suivi 
+        GROUP BY u.id_utilisateur, u.nom, u.prenom ORDER BY nb_abonnes DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
