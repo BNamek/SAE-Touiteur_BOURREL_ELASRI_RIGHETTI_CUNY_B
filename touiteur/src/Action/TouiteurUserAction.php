@@ -5,6 +5,9 @@ namespace iutnc\touiteur\Action;
 use iutnc\touiteur\BD\TouiteurRepository;
 use iutnc\touiteur\Render\TouitesUserRenderer;
 
+/**
+ * Action permettant de regarder les touites d'un utilisateur donnée
+ */
 class TouiteurUserAction extends ActionAbs{
     public function execute():string{
         // Verifie si l'id est bien present

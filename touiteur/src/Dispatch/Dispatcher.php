@@ -1,6 +1,8 @@
 <?php
 namespace iutnc\touiteur\Dispatch;
 
+use iutnc\touiteur\Action\InfluenceursAction;
+
 class Dispatcher{
     private $action;
     private array $route;
@@ -43,6 +45,8 @@ class Dispatcher{
     //Le parametre html c'est donc le execute qu'on vas afficher
     
     private function renderPage(string $html): void{
+        $actionInfluenceurs = new InfluenceursAction();
+        $htmlInfluenceurs = $actionInfluenceurs->execute();
         $title = match ($this->action) {
             'touites' => 'Fil d’actualité',
             'publie-touite' => 'Publier un touite',
@@ -116,6 +120,8 @@ class Dispatcher{
 
                 <!-- COLONNE DROITE -->
                 <aside class="right-sidebar">
+                    $htmlInfluenceurs
+
                     <div class="search-display">
                         ⌕ &nbsp; Découvrir Touiteur
                     </div>
