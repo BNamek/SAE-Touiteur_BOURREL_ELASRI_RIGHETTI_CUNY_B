@@ -21,5 +21,11 @@ $dispatcher->addRoute('touites-user', TouiteurUserAction::class);
 $dispatcher->addRoute('publie-touite', PublieTouiteAction::class);
 $dispatcher->addRoute('touites',ListeTouitesAction::class);
 
+//on ajoute la route qui permet d'acceder à l'action de publication d'un touite
+$dispatcher->addRoute(
+    'publier-touite',
+    \iutnc\touiteur\Action\PublierTouiteAction::class
+);
+
 // On lance l'action demandée dans l'URL
 $dispatcher->run();
