@@ -100,24 +100,6 @@ class TouiteurRepository {
         ]);
     }
 
-
-}
-    $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note)
-            VALUES (:texte, :date_publication, :auteur, :note)";
-
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([
-        ':texte'            => $t->getTexte(),
-        ':date_publication' => $t->getDatePublication(),
-        ':auteur'           => $t->getIdAuteur(),
-        ':note'             => $t->getNote()
-    ]);
-
-    $id = (int)$this->pdo->lastInsertId();
-    $t->setId($id);
-    return $id;
-    }
-
     //Premiere fonctionaliter
     public function fonction1():array{
         $requete = "select t.texte,t.id_touite,t.date_publication,t.id_auteur from touite t
@@ -141,3 +123,4 @@ class TouiteurRepository {
 
     }
 }
+    
