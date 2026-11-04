@@ -147,7 +147,6 @@ class TouiteurRepository {
 
         return $res ?: null;
     }
-<<<<<<< HEAD
 
     public function getTouitesParTag(string $nom):array{
         $requete = "SELECT t.id_touite, t.texte, t.date_publication, t.note, u.id_utilisateur, u.nom, u.prenom
@@ -172,10 +171,9 @@ class TouiteurRepository {
         }
         return $res;
     }
-=======
-    
+
     public function getInfluenceurs(): array{
-        $sql = "SELECT  u.id_utilisateur, u.nom, u.prenom, COUNT(s.id_suiveur) AS nb_abonnes FROM Utilisateur u LEFT JOIN Suivi_Utilisateur s ON u.id_utilisateur = s.id_suivi 
+        $sql = "SELECT  u.id_utilisateur, u.nom, u.prenom, COUNT(s.id_suiveur) AS nb_abonnes FROM Utilisateur u LEFT JOIN Suivi_Utilisateur s ON u.id_utilisateur = s.id_suivi
         GROUP BY u.id_utilisateur, u.nom, u.prenom ORDER BY nb_abonnes DESC LIMIT 5";
 
         $stmt = $this->pdo->prepare($sql);
@@ -183,7 +181,7 @@ class TouiteurRepository {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     public function estAbonneUtilisateur(int $idSuiveur, int $idSuivi): bool {
         $sql = "SELECT COUNT(*) FROM Suivi_Utilisateur
                 WHERE id_suiveur = :suiveur AND id_suivi = :suivi";
@@ -219,7 +217,7 @@ class TouiteurRepository {
             ':suivi'  => $idSuivi
         ]);
     }
-    
+
     //feat8 - enregistrer les hashtags d'un touite
     public function enregistrerTagsTouite(int $idTouite, string $texte): void {
 
@@ -271,5 +269,4 @@ class TouiteurRepository {
         }
     }
 
->>>>>>> 48a6edef61a1df517a60da9060d072f144dc3dfd
 }
