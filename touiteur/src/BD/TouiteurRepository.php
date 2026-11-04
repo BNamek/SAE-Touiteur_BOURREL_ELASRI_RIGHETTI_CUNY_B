@@ -3,6 +3,7 @@ namespace iutnc\touiteur\BD;
 
 use PDO;
 use iutnc\touiteur\touite\Touite;
+use iutnc\touiteur\touite\Tag;
 
 class TouiteurRepository {
 
@@ -193,4 +194,56 @@ class TouiteurRepository {
             ':suivi'  => $idSuivi
         ]);
     }
+    
+    //feat8 - enregistrer les hashtags d'un touite
+    public function enregistrerTagsTouite(int $idTouite, string $texte): void {
+
+        //on recupere les hashtags du texte
+        $tags = Tag::extraireTags($texte);
+
+        foreach ($tags as $libelle) {
+
+            //on cherche si le tag existe dans la BD
+            $sql = "SELECT id_tag FROM tag WHERE libelle = :libelle";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':libelle' => $libelle
+            ]);
+
+            $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($ligne === false) {
+
+                //si le tag n'existe pas on le cree
+                $sql = "INSERT INTO tag (libelle, description_tag)
+                        VALUES (:libelle, :description)";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    ':libelle' => $libelle,
+                    ':description' => ''
+                ]);
+
+                //on recupere le nouvel identifiant
+                $idTag = (int) $this->pdo->lastInsertId();
+
+            } else {
+
+                //si le tag existe on utilise son identifiant
+                $idTag = (int) $ligne['id_tag'];
+            }
+
+            //on associe le tag au touite
+            $sql = "INSERT INTO touite_tag (id_touite, id_tag)
+                    VALUES (:touite, :tag)";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':touite' => $idTouite,
+                ':tag' => $idTag
+            ]);
+        }
+    }
+
 }
