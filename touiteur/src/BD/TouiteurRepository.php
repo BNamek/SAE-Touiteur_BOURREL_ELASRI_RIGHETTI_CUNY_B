@@ -48,7 +48,6 @@ class TouiteurRepository {
     // Méthodes liées à la BD
 
     public function insertTouite(Touite $t): int {
-<<<<<<< HEAD
         $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note) 
                 VALUES (:texte, :date_publication, :auteur, :note)";
                 
@@ -103,7 +102,6 @@ class TouiteurRepository {
 
 
 }
-=======
     $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note)
             VALUES (:texte, :date_publication, :auteur, :note)";
 
@@ -143,4 +141,3 @@ class TouiteurRepository {
 
     }
 }
->>>>>>> dev
