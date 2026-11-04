@@ -5,7 +5,7 @@ require_once 'vendor/autoload.php';
 use iutnc\touiteur\BD\ConnectionBD;
 use iutnc\touiteur\Dispatch\Dispatcher;
 use iutnc\touiteur\Action\DefaultAction;
-use iutnc\touiteur\Action\PublishTouiteAction;
+use iutnc\touiteur\Action\PublieTouiteAction;
 
 // On charge la configuration de la base de données
 ConnectionBD::setConfig('config/db.config.ini');
