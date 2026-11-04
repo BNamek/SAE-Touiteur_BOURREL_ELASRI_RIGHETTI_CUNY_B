@@ -100,7 +100,7 @@ class TouiteurRepository {
         ]);
     }
 
-    
+
     public function fonction1(): array {
 
         $requete = "SELECT
@@ -138,7 +138,7 @@ class TouiteurRepository {
                 FROM Touite t
                 JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
                 WHERE t.id_touite = :id";
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':id' => $idTouite
@@ -147,5 +147,29 @@ class TouiteurRepository {
         $res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return $res ?: null;
+    }
+
+    public function getTouitesParTag(string $nom):array{
+        $requete = "SELECT t.id_touite, t.texte, t.date_publication, t.note, u.id_utilisateur, u.nom, u.prenom
+                FROM Touite t
+                INNER JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
+                INNER JOIN Touite_tag tt On t.id_touite = tt.id_touite
+                INNER JOIN Tag ta ON ta.id_tag = tt.id_tag
+                WHERE ta.libelle = :nomTag
+                ORDER BY t.date_publication DESC";
+        $prepStmt = $this->pdo->prepare($requete);
+
+        $prepStmt -> execute([':nomTag' => $nom]);
+        $res = [];
+
+        while($ligne = $prepStmt -> fetch(\PDO::FETCH_ASSOC)){
+            $t = new Touite($ligne['texte'],(int) $ligne['id_utilisateur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+
+            $t->setNom($ligne['nom']);
+            $t->setPrenom($ligne['prenom']);
+
+            $res[] = $t;
+        }
+        return $res;
     }
 }
