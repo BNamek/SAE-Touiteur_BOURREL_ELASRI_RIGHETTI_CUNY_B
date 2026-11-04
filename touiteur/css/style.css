@@ -1,27 +1,34 @@
 
-/* =====================================
-   TOUITEUR - DESIGN TWITTER
-===================================== */
+/* ========================================
+   TOUITEUR — INTERFACE STYLE TWITTER / X
+   ======================================== */
 
 :root {
     --blue: #1d9bf0;
     --blue-hover: #1a8cd8;
+    --blue-light: #e8f5fd;
     --text: #0f1419;
     --gray: #536471;
     --border: #eff3f4;
     --hover: #f7f9f9;
+    --background: #ffffff;
 }
 
 * {
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
-    background: #fff;
+    background: var(--background);
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
+    line-height: 1.5;
 }
 
 a {
@@ -29,43 +36,74 @@ a {
     text-decoration: none;
 }
 
-button, input, textarea {
+button,
+input,
+textarea,
+select {
     font: inherit;
 }
 
-/* =====================================
-   STRUCTURE 3 COLONNES
-===================================== */
+button {
+    cursor: pointer;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+}
+
+/* ========================================
+   STRUCTURE PRINCIPALE
+   ======================================== */
 
 .twitter-layout {
     display: grid;
-    grid-template-columns: 270px minmax(0, 600px) 330px;
-    max-width: 1240px;
+    grid-template-columns: 260px minmax(0, 600px) 320px;
+    max-width: 1200px;
     min-height: 100vh;
-    margin: auto;
+    margin: 0 auto;
 }
-
-/* =====================================
-   MENU GAUCHE
-===================================== */
 
 .sidebar {
     position: sticky;
     top: 0;
     height: 100vh;
-    padding: 12px 20px;
     display: flex;
     flex-direction: column;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    min-width: 0;
+}
+
+.timeline {
+    min-width: 0;
     border-right: 1px solid var(--border);
 }
+
+.timeline-content {
+    min-width: 0;
+}
+
+/* ========================================
+   LOGO ET MENU DE GAUCHE
+   ======================================== */
 
 .logo {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 10px 14px;
+    margin-bottom: 25px;
     font-size: 25px;
     font-weight: 800;
-    margin: 8px 0 30px 15px;
+    letter-spacing: -1px;
+}
+
+.logo:hover {
+    color: var(--blue);
 }
 
 .logo-symbol {
@@ -76,18 +114,18 @@ button, input, textarea {
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .menu a {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 17px;
     padding: 13px 17px;
-    border-radius: 30px;
+    border-radius: 999px;
     font-size: 19px;
     font-weight: 500;
-    transition: background .2s;
+    transition: background 0.2s;
 }
 
 .menu a:hover {
@@ -95,35 +133,37 @@ button, input, textarea {
 }
 
 .menu-icon {
-    font-size: 27px;
     width: 27px;
+    font-size: 26px;
     text-align: center;
 }
 
 .tweet-button {
     display: block;
-    text-align: center;
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px 20px;
+    border-radius: 999px;
     background: var(--blue);
     color: white;
-    padding: 15px 20px;
-    border-radius: 30px;
+    text-align: center;
     font-size: 17px;
-    font-weight: bold;
-    margin-top: 22px;
-    transition: background .2s;
+    font-weight: 700;
+    transition: background 0.2s;
 }
 
 .tweet-button:hover {
     background: var(--blue-hover);
+    color: white;
 }
 
 .sidebar-bottom {
+    margin-top: auto;
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: auto;
     padding: 12px;
-    border-radius: 30px;
+    border-radius: 999px;
 }
 
 .sidebar-bottom:hover {
@@ -146,49 +186,43 @@ button, input, textarea {
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    background: var(--blue);
-    color: #fff;
     border-radius: 50%;
-    font-size: 20px;
-    font-weight: bold;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 19px;
+    font-weight: 800;
 }
 
-/* =====================================
-   COLONNE CENTRALE
-===================================== */
-
-.timeline {
-    min-width: 0;
-    border-right: 1px solid var(--border);
-}
+/* ========================================
+   BARRE SUPÉRIEURE
+   ======================================== */
 
 .timeline-header {
     position: sticky;
     top: 0;
     z-index: 10;
-    background: rgba(255,255,255,.94);
-    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    min-height: 62px;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
 }
 
 .timeline-header h1 {
     margin: 0;
     font-size: 21px;
     font-weight: 800;
+    letter-spacing: -0.5px;
 }
-
-.timeline-content {
-    min-width: 0;
-}
-
-/* Titre des pages */
 
 .timeline-content > h1,
 .timeline-content > h2 {
     margin: 0;
     padding: 18px 20px;
     font-size: 19px;
+    font-weight: 800;
     border-bottom: 1px solid var(--border);
 }
 
@@ -196,64 +230,74 @@ button, input, textarea {
     display: none;
 }
 
-/* =====================================
-   PUBLICATIONS COMME TWITTER
-===================================== */
+/* ========================================
+   LISTE DES TOUITES
+   ======================================== */
 
 .touite,
-.timeline-content article {
+.timeline-content article:not(.touite-detail) {
     position: relative;
-    min-height: 120px;
-    padding: 17px 20px 17px 85px;
+    min-height: 115px;
     margin: 0;
-    background: white;
+    padding: 17px 20px 17px 83px;
     border-bottom: 1px solid var(--border);
-    transition: background .2s;
+    background: white;
     overflow-wrap: anywhere;
+    transition: background 0.2s;
 }
 
 .touite:hover,
-.timeline-content article:hover {
+.timeline-content article:not(.touite-detail):hover {
     background: var(--hover);
 }
 
-/* Avatar automatique */
+/* Avatar par défaut des publications */
 
 .touite::before,
-.timeline-content article::before {
+.timeline-content article:not(.touite-detail)::before {
     content: "T";
     position: absolute;
     left: 18px;
-    top: 16px;
-    width: 48px;
-    height: 48px;
+    top: 17px;
+    width: 47px;
+    height: 47px;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: #dceeff;
+    background: #dbeafe;
     color: #187ac0;
-    font-size: 20px;
-    font-weight: bold;
+    font-weight: 800;
+    font-size: 19px;
 }
 
-/* Auteur */
+/* En-tête auteur + date */
+
+.touite-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
 
 .touite .auteur {
     display: inline;
     margin: 0;
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 800;
+}
+
+.touite .auteur a {
+    color: var(--text);
 }
 
 .touite .auteur a:hover {
     text-decoration: underline;
 }
 
-/* Date */
-
 .touite .date {
     display: inline;
-    margin-left: 8px;
+    margin: 0;
     color: var(--gray);
     font-size: 13px;
 }
@@ -262,27 +306,34 @@ button, input, textarea {
     content: "· ";
 }
 
-/* Message */
+/* Texte d'une publication */
 
 .touite .texte {
-    margin: 12px 0 18px;
+    margin: 10px 0 16px;
+    color: var(--text);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.65;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
-/* Lien vers le détail */
+.touite .texte a {
+    color: var(--blue);
+}
+
+/* Bouton pour ouvrir un touite */
 
 .touite > a:last-child {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 12px;
-    margin-left: -12px;
+    gap: 8px;
+    margin-left: -10px;
+    padding: 7px 11px;
+    border-radius: 999px;
     color: var(--gray);
     font-size: 13px;
-    border-radius: 25px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
 }
 
 .touite > a:last-child::before {
@@ -291,33 +342,173 @@ button, input, textarea {
 }
 
 .touite > a:last-child:hover {
-    background: #e8f5fd;
+    background: var(--blue-light);
     color: var(--blue);
 }
 
-/* Touites par utilisateur */
+/* Affichage générique des articles */
 
-.timeline-content article p {
-    margin: 0 0 14px;
+.timeline-content article:not(.touite-detail) p {
+    margin: 0 0 12px;
     line-height: 1.6;
 }
 
-.timeline-content article small {
+.timeline-content article:not(.touite-detail) small {
+    color: var(--gray);
+}
+
+.timeline-content article:not(.touite-detail) hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+/* ========================================
+   PAGE DÉTAIL D'UN TOUITE
+   ======================================== */
+
+.touite-detail {
+    position: relative;
+    margin: 0;
+    padding: 24px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+/* En-tête avec avatar */
+
+.touite-detail .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 25px;
+}
+
+.detail-avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #187ac0;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.detail-user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+}
+
+.detail-author {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.detail-author:hover {
+    text-decoration: underline;
+}
+
+.detail-username {
     color: var(--gray);
     font-size: 13px;
 }
 
-.timeline-content article hr {
-    display: none;
+/* Texte complet */
+
+.touite-detail .detail-text {
+    margin: 0 0 24px;
+    color: var(--text);
+    font-size: 23px;
+    line-height: 1.55;
+    font-weight: 400;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
-/* =====================================
+.detail-text a {
+    color: var(--blue);
+}
+
+.detail-text a:hover {
+    text-decoration: underline;
+}
+
+/* Date */
+
+.detail-date {
+    padding: 0 0 19px;
+    color: var(--gray);
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Score / note */
+
+.detail-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 0;
+    color: var(--gray);
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-score::before {
+    content: "♡";
+    color: #e0245e;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.detail-score strong {
+    color: var(--text);
+    font-weight: 800;
+}
+
+/* Bouton retour */
+
+.detail-footer {
+    display: flex;
+    align-items: center;
+    padding-top: 22px;
+}
+
+.detail-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 19px;
+    background: var(--border);
+    color: var(--text);
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+.detail-back:hover {
+    background: #e1e8ed;
+}
+
+/* ========================================
    FORMULAIRE DE PUBLICATION
-===================================== */
+   ======================================== */
 
 .timeline-content form {
-    padding: 25px 22px;
+    padding: 23px 22px;
     border-bottom: 1px solid var(--border);
+    background: white;
 }
 
 .timeline-content form > div {
@@ -326,56 +517,63 @@ button, input, textarea {
 
 .timeline-content label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
+    color: var(--gray);
     font-size: 14px;
     font-weight: 600;
-    color: var(--gray);
 }
 
 .timeline-content textarea {
     display: block;
     width: 100%;
-    min-height: 170px;
-    padding: 18px 5px;
-    border: none;
+    min-height: 150px;
+    padding: 14px 3px;
+    border: 0;
     border-bottom: 1px solid var(--border);
     border-radius: 0;
+    background: white;
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1.5;
     outline: none;
     resize: vertical;
-    font-size: 21px;
-    line-height: 1.5;
 }
 
 .timeline-content textarea:focus {
     border-bottom-color: var(--blue);
 }
 
-.timeline-content input[type="number"],
 .timeline-content input[type="text"],
 .timeline-content input[type="email"],
+.timeline-content input[type="number"],
 .timeline-content select {
     width: 100%;
     max-width: 100%;
     padding: 13px 15px;
     border: 1px solid #cfd9de;
     border-radius: 12px;
+    background: white;
     outline: none;
 }
 
-.timeline-content input:focus {
+.timeline-content input:focus,
+.timeline-content select:focus {
     border-color: var(--blue);
 }
 
 .timeline-content button,
 .timeline-content input[type="submit"] {
-    border: none;
-    border-radius: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     padding: 12px 25px;
     background: var(--blue);
     color: white;
-    font-weight: bold;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background .2s;
+    transition: background 0.2s;
 }
 
 .timeline-content button:hover,
@@ -383,17 +581,17 @@ button, input, textarea {
     background: var(--blue-hover);
 }
 
-/* =====================================
-   MESSAGES
-===================================== */
+/* ========================================
+   MESSAGES D'ERREUR ET CONFIRMATION
+   ======================================== */
 
 .error,
 .confirmation {
-    padding: 18px;
-    margin: 18px;
+    margin: 20px;
+    padding: 16px 18px;
     background: #f7f9f9;
     border: 1px solid var(--border);
-    border-radius: 15px;
+    border-radius: 13px;
 }
 
 .error {
@@ -408,56 +606,60 @@ button, input, textarea {
     margin: 20px;
 }
 
-/* =====================================
+/* ========================================
    COLONNE DROITE
-===================================== */
+   ======================================== */
 
 .right-sidebar {
     position: sticky;
     top: 0;
     align-self: start;
-    padding: 15px 25px;
+    padding: 16px 22px;
 }
 
 .search-display {
+    padding: 14px 19px;
+    margin-bottom: 24px;
+    border-radius: 999px;
     background: var(--border);
-    padding: 15px 20px;
-    border-radius: 30px;
     color: var(--gray);
-    margin-bottom: 25px;
+    font-size: 14px;
 }
 
 .right-card {
-    background: #f7f9f9;
-    border-radius: 17px;
-    padding: 20px;
     margin-bottom: 20px;
+    padding: 20px;
+    background: var(--hover);
+    border-radius: 18px;
 }
 
 .right-card h2 {
-    font-size: 20px;
     margin: 0 0 12px;
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 800;
 }
 
 .right-card p {
+    color: var(--gray);
     font-size: 14px;
     line-height: 1.6;
-    color: var(--gray);
 }
 
 .right-button {
     display: inline-block;
     margin-top: 10px;
     padding: 11px 18px;
-    border-radius: 30px;
     background: var(--text);
     color: white;
-    font-weight: bold;
+    border-radius: 999px;
     font-size: 14px;
+    font-weight: 700;
 }
 
 .right-button:hover {
     background: #303941;
+    color: white;
 }
 
 .right-link {
@@ -471,8 +673,8 @@ button, input, textarea {
 }
 
 .right-link span {
-    font-size: 12px;
     color: var(--gray);
+    font-size: 12px;
 }
 
 .right-link strong {
@@ -486,15 +688,16 @@ button, input, textarea {
 
 .right-footer {
     padding: 10px;
-    font-size: 12px;
     color: var(--gray);
+    font-size: 12px;
 }
 
-/* =====================================
-   RESPONSIVE TABLETTE
-===================================== */
+/* ========================================
+   RESPONSIVE — TABLETTE
+   ======================================== */
 
 @media (max-width: 1100px) {
+
     .twitter-layout {
         grid-template-columns: 220px minmax(0, 1fr);
         max-width: 900px;
@@ -503,11 +706,19 @@ button, input, textarea {
     .right-sidebar {
         display: none;
     }
+
+    .sidebar {
+        padding: 12px;
+    }
+
+    .menu a {
+        font-size: 17px;
+    }
 }
 
-/* =====================================
-   RESPONSIVE MOBILE
-===================================== */
+/* ========================================
+   RESPONSIVE — MOBILE
+   ======================================== */
 
 @media (max-width: 650px) {
 
@@ -517,16 +728,17 @@ button, input, textarea {
 
     .sidebar {
         position: relative;
-        width: 100%;
         height: auto;
-        padding: 10px;
+        width: 100%;
+        padding: 10px 12px;
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
 
     .logo {
         margin: 0 0 10px;
-        font-size: 20px;
+        padding: 5px;
+        font-size: 21px;
     }
 
     .logo-symbol {
@@ -534,24 +746,23 @@ button, input, textarea {
     }
 
     .menu {
-        display: flex;
         flex-direction: row;
-        gap: 3px;
+        gap: 4px;
         overflow-x: auto;
     }
 
     .menu a {
         flex: 1;
         justify-content: center;
-        gap: 6px;
+        gap: 7px;
         padding: 10px;
-        font-size: 12px;
         white-space: nowrap;
+        font-size: 12px;
     }
 
     .menu-icon {
-        font-size: 18px;
         width: auto;
+        font-size: 18px;
     }
 
     .tweet-button,
@@ -560,27 +771,67 @@ button, input, textarea {
     }
 
     .timeline {
-        width: 100%;
         border-right: none;
     }
 
     .timeline-header {
-        padding: 14px 16px;
+        min-height: 55px;
+        padding: 13px 16px;
+    }
+
+    .timeline-header h1 {
+        font-size: 19px;
     }
 
     .touite,
-    .timeline-content article {
-        padding: 15px 12px 15px 72px;
+    .timeline-content article:not(.touite-detail) {
+        padding: 15px 13px 16px 73px;
     }
 
     .touite::before,
-    .timeline-content article::before {
+    .timeline-content article:not(.touite-detail)::before {
+        top: 15px;
         left: 12px;
         width: 45px;
         height: 45px;
     }
 
+    .touite-detail {
+        padding: 18px 16px;
+    }
+
+    .detail-header {
+        gap: 11px;
+    }
+
+    .detail-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .touite-detail .detail-text {
+        font-size: 19px;
+    }
+
+    .detail-author {
+        font-size: 15px;
+    }
+
     .timeline-content form {
-        padding: 18px 15px;
+        padding: 18px 16px;
+    }
+
+    .timeline-content textarea {
+        font-size: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
     }
 }

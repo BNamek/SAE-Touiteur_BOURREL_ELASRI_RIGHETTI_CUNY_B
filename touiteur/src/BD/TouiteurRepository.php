@@ -120,9 +120,7 @@ class TouiteurRepository {
 
         $res = [];
 
-        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {
-
-            $t = new Touite($ligne['texte'],(int) $ligne['id_auteur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {$t = new Touite($ligne['texte'], (int) $ligne['id_auteur'], $ligne['date_publication'], 0, (int) $ligne['id_touite']);
 
             $t->setNom($ligne['nom']);
             $t->setPrenom($ligne['prenom']);
