@@ -8,6 +8,8 @@ class Touite{
     private string $datePublication;
     private int $idAuteur;
     private int $note = 0;
+    private string $nom = '';
+    private string $prenom = '';
 
     public function __construct(string $texte, int $idAuteur, string $datePublication = '', int $note = 0, ?int $id = null){
         if (mb_strlen($texte) > 235) {
@@ -55,6 +57,22 @@ class Touite{
 
     public function setNote(int $note): void{
         $this->note = $note;
+    }
+
+    public function getNom(): string {
+        return $this->nom;
+    }
+
+    public function getPrenom(): string {
+        return $this->prenom;
+    }
+
+    public function setNom(string $nom): void {
+        $this->nom = $nom;
+    }
+
+    public function setPrenom(string $prenom): void {
+        $this->prenom = $prenom;
     }
 
 }

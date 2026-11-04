@@ -15,9 +15,11 @@ class TouiteRender{
         $aut = htmlspecialchars($this -> touite -> getIdAuteur());
         $tex = htmlspecialchars($this -> touite -> getTexte());
         $dat = htmlspecialchars($this -> touite -> getDatePublication());
+        $nom = htmlspecialchars($this -> touite -> getNom());
+        $prenom = htmlspecialchars($this -> touite -> getprenom());
 
         $res = "<div class='touite'>
-            <p class='auteur'><a href='?action=touites-auteur&id=...'>$aut</a></p>
+            <p class='pn'><a href='?action=touites-user&id=$aut'>$nom $prenom</a></p>
             <p class='date'>$dat</p>
             <p class='texte'>$tex</p>
             <a href='?action=detail&id=...'>Voir le détail</a>

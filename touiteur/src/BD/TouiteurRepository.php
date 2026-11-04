@@ -100,27 +100,37 @@ class TouiteurRepository {
         ]);
     }
 
-    //Premiere fonctionaliter
-    public function fonction1():array{
-        $requete = "select t.texte,t.id_touite,t.date_publication, from touite t
-        inner join utilisateur u on t.id_auteur = u.id_utilisateur
-        order by t.date_publication desc";
+    
+    public function fonction1(): array {
 
-        //On met prepare pour éviter l'injection sql, donc faire des requetes préparée
-        $rq = $this -> pdo -> prepare($requete);
-        //On execute ensuite la requete
-        $rq -> execute();
+        $requete = "SELECT
+                        t.texte,
+                        t.id_touite,
+                        t.date_publication,
+                        t.id_auteur,
+                        u.nom,
+                        u.prenom
+                    FROM touite t
+                    INNER JOIN utilisateur u
+                        ON t.id_auteur = u.id_utilisateur
+                    ORDER BY t.date_publication DESC";
 
-        //On crée un tableau vide pour stocker les touite
+        $rq = $this->pdo->prepare($requete);
+        $rq->execute();
+
         $res = [];
 
-        //On stock les valeurs dans un tableau associatif
-        while($ligne = $rq -> fetch(PDO::FETCH_ASSOC)){
-            $t = new Touite($ligne['texte'],$ligne['id_touite'],$ligne['date_publication'],$ligne['id_auteur']);
-            $res []= $t;
+        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {
+
+            $t = new Touite($ligne['texte'],(int) $ligne['id_auteur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+
+            $t->setNom($ligne['nom']);
+            $t->setPrenom($ligne['prenom']);
+
+            $res[] = $t;
         }
 
         return $res;
-
     }
+
 }
