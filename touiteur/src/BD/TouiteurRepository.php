@@ -102,7 +102,8 @@ class TouiteurRepository {
 
     //Premiere fonctionaliter
     public function fonction1():array{
-        $requete = "select t.texte,t.id_touite,t.date_publication,t.id_auteur from touite t
+        $requete = "select t.texte,t.id_touite,t.date_publication, from touite t
+        inner join utilisateur u on t.id_auteur = u.id_utilisateur
         order by t.date_publication desc";
 
         //On met prepare pour éviter l'injection sql, donc faire des requetes préparée
