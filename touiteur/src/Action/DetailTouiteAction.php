@@ -45,6 +45,7 @@ class DetailTouiteAction extends ActionAbs {
                 <p>
                     <strong>Auteur :</strong> 
                     <a href='?action=touites-user&id={$idAuteur}'>{$auteur}</a>
+                    | <a href='?action=suivre-utilisateur&id_suiveur=1&id_suivi={$idAuteur}'>Suivre / Ne plus suivre</a>
                 </p>
                 <p><strong>Date de publication :</strong> {$date}</p>
                 <p><strong>Score / Note :</strong> {$note}</p>

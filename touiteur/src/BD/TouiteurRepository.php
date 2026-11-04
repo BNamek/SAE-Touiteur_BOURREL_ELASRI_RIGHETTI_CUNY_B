@@ -148,4 +148,40 @@ class TouiteurRepository {
 
         return $res ?: null;
     }
+
+    public function estAbonneUtilisateur(int $idSuiveur, int $idSuivi): bool {
+        $sql = "SELECT COUNT(*) FROM Suivi_Utilisateur
+                WHERE id_suiveur = :suiveur AND id_suivi = :suivi";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+
+        return (int)$stmt->fetchColumn() > 0;
+    }
+
+    public function abonnerUtilisateur(int $idSuiveur, int $idSuivi): void{
+        $sql = "INSERT INTO Suivi_Utilisateur (id_suiveur, id_suivi)
+                VALUES (:suiveur, :suivi)";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+    }
+
+    public function desabonnerUtilisateur(int $idSuiveur, int $idSuivi): void{
+        $sql = "DELETE FROM Suivi_Utilisateur
+                WHERE id_suiveur = :suiveur
+                AND id_suivi = :suivi";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+    }
 }
