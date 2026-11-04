@@ -66,3 +66,7 @@ CREATE TABLE Abonnement_Tag (
     FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
     FOREIGN KEY (id_tag) REFERENCES Tag(id_tag)
 );
+
+--à ajouter 
+
+ALTER TABLE Touite ADD note NUMBER DEFAULT 0 NOT NULL; 

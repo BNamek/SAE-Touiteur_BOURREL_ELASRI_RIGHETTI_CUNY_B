@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\touiteur\dispatch;
+namespace iutnc\touiteur\Dispatch;
 
 class Dispatcher{
     private $action;
@@ -41,21 +41,116 @@ class Dispatcher{
 
     //La fonction renderPage vas afficher la suite de la page html
     //Le parametre html c'est donc le execute qu'on vas afficher
-    private function renderPage(string $html):void{
-        echo '<!DOCTYPE html>
+    
+    private function renderPage(string $html): void{
+        $title = match ($this->action) {
+            'touites' => 'Fil d’actualité',
+            'publie-touite' => 'Publier un touite',
+            'touites-user' => 'Profil utilisateur',
+            'abonnement-tag' => 'Abonnements',
+            default => 'Accueil'
+        };
+
+        echo <<<HTML
+        <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0">
             <title>Touiteur</title>
-
+            <link rel="stylesheet" href="css/style.css">
         </head>
+
         <body>
-        <h1>Touiteur</h1>
-        <br>
-        <a href="?action=default">Acceuil</a>
-        <br>
-        <a href="?action=add-user">Se connecter</a>
-        <br>'.$html.'</body> </html>';
+            <div class="twitter-layout">
+
+                <!-- NAVIGATION GAUCHE -->
+                <aside class="sidebar">
+                    <a class="logo" href="?action=default">
+                        <span class="logo-symbol">✦</span>
+                        <span>Touiteur</span>
+                    </a>
+
+                    <nav class="menu">
+                        <a href="?action=default">
+                            <span class="menu-icon">⌂</span>
+                            Accueil
+                        </a>
+
+                        <a href="?action=touites">
+                            <span class="menu-icon">⌕</span>
+                            Explorer
+                        </a>
+
+                        <a href="?action=publie-touite">
+                            <span class="menu-icon">✎</span>
+                            Nouveau touite
+                        </a>
+                    </nav>
+
+                    <a href="?action=publie-touite"
+                    class="tweet-button">
+                        Publier
+                    </a>
+
+                    <div class="sidebar-bottom">
+                        <div class="profile-avatar">T</div>
+                        <div>
+                            <strong>Touiteur</strong>
+                            <span>@touiteur</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- CONTENU CENTRAL -->
+                <main class="timeline">
+                    <header class="timeline-header">
+                        <h1>{$title}</h1>
+                    </header>
+
+                    <section class="timeline-content">
+                        {$html}
+                    </section>
+                </main>
+
+                <!-- COLONNE DROITE -->
+                <aside class="right-sidebar">
+                    <div class="search-display">
+                        ⌕ &nbsp; Découvrir Touiteur
+                    </div>
+
+                    <div class="right-card">
+                        <h2>Bienvenue sur Touiteur</h2>
+                        <p>
+                            Partage tes idées, découvre les
+                            publications et retrouve tes amis.
+                        </p>
+                        <a href="?action=publie-touite"
+                        class="right-button">
+                            Écrire un touite
+                        </a>
+                    </div>
+
+                    <div class="right-card">
+                        <h2>À découvrir</h2>
+
+                        <a href="?action=touites"
+                        class="right-link">
+                            <span>Publications</span>
+                            <strong>Voir les touites</strong>
+                        </a>
+                    </div>
+
+                    <p class="right-footer">
+                        Touiteur.app · SAE BUT Informatique
+                    </p>
+                </aside>
+
+            </div>
+        </body>
+        </html>
+        HTML;
     }
+
 }

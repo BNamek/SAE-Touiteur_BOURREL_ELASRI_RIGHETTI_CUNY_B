@@ -1,0 +1,586 @@
+
+/* =====================================
+   TOUITEUR - DESIGN TWITTER
+===================================== */
+
+:root {
+    --blue: #1d9bf0;
+    --blue-hover: #1a8cd8;
+    --text: #0f1419;
+    --gray: #536471;
+    --border: #eff3f4;
+    --hover: #f7f9f9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button, input, textarea {
+    font: inherit;
+}
+
+/* =====================================
+   STRUCTURE 3 COLONNES
+===================================== */
+
+.twitter-layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 600px) 330px;
+    max-width: 1240px;
+    min-height: 100vh;
+    margin: auto;
+}
+
+/* =====================================
+   MENU GAUCHE
+===================================== */
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 25px;
+    font-weight: 800;
+    margin: 8px 0 30px 15px;
+}
+
+.logo-symbol {
+    color: var(--blue);
+    font-size: 35px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 13px 17px;
+    border-radius: 30px;
+    font-size: 19px;
+    font-weight: 500;
+    transition: background .2s;
+}
+
+.menu a:hover {
+    background: var(--border);
+}
+
+.menu-icon {
+    font-size: 27px;
+    width: 27px;
+    text-align: center;
+}
+
+.tweet-button {
+    display: block;
+    text-align: center;
+    background: var(--blue);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 22px;
+    transition: background .2s;
+}
+
+.tweet-button:hover {
+    background: var(--blue-hover);
+}
+
+.sidebar-bottom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding: 12px;
+    border-radius: 30px;
+}
+
+.sidebar-bottom:hover {
+    background: var(--hover);
+}
+
+.sidebar-bottom strong,
+.sidebar-bottom span {
+    display: block;
+}
+
+.sidebar-bottom span {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* =====================================
+   COLONNE CENTRALE
+===================================== */
+
+.timeline {
+    min-width: 0;
+    border-right: 1px solid var(--border);
+}
+
+.timeline-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+}
+
+.timeline-header h1 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.timeline-content {
+    min-width: 0;
+}
+
+/* Titre des pages */
+
+.timeline-content > h1,
+.timeline-content > h2 {
+    margin: 0;
+    padding: 18px 20px;
+    font-size: 19px;
+    border-bottom: 1px solid var(--border);
+}
+
+.timeline-content > br {
+    display: none;
+}
+
+/* =====================================
+   PUBLICATIONS COMME TWITTER
+===================================== */
+
+.touite,
+.timeline-content article {
+    position: relative;
+    min-height: 120px;
+    padding: 17px 20px 17px 85px;
+    margin: 0;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    transition: background .2s;
+    overflow-wrap: anywhere;
+}
+
+.touite:hover,
+.timeline-content article:hover {
+    background: var(--hover);
+}
+
+/* Avatar automatique */
+
+.touite::before,
+.timeline-content article::before {
+    content: "T";
+    position: absolute;
+    left: 18px;
+    top: 16px;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #dceeff;
+    color: #187ac0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Auteur */
+
+.touite .auteur {
+    display: inline;
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.touite .auteur a:hover {
+    text-decoration: underline;
+}
+
+/* Date */
+
+.touite .date {
+    display: inline;
+    margin-left: 8px;
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.touite .date::before {
+    content: "· ";
+}
+
+/* Message */
+
+.touite .texte {
+    margin: 12px 0 18px;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Lien vers le détail */
+
+.touite > a:last-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    margin-left: -12px;
+    color: var(--gray);
+    font-size: 13px;
+    border-radius: 25px;
+}
+
+.touite > a:last-child::before {
+    content: "♡";
+    font-size: 20px;
+}
+
+.touite > a:last-child:hover {
+    background: #e8f5fd;
+    color: var(--blue);
+}
+
+/* Touites par utilisateur */
+
+.timeline-content article p {
+    margin: 0 0 14px;
+    line-height: 1.6;
+}
+
+.timeline-content article small {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.timeline-content article hr {
+    display: none;
+}
+
+/* =====================================
+   FORMULAIRE DE PUBLICATION
+===================================== */
+
+.timeline-content form {
+    padding: 25px 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.timeline-content form > div {
+    margin-bottom: 18px;
+}
+
+.timeline-content label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray);
+}
+
+.timeline-content textarea {
+    display: block;
+    width: 100%;
+    min-height: 170px;
+    padding: 18px 5px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    outline: none;
+    resize: vertical;
+    font-size: 21px;
+    line-height: 1.5;
+}
+
+.timeline-content textarea:focus {
+    border-bottom-color: var(--blue);
+}
+
+.timeline-content input[type="number"],
+.timeline-content input[type="text"],
+.timeline-content input[type="email"],
+.timeline-content select {
+    width: 100%;
+    max-width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #cfd9de;
+    border-radius: 12px;
+    outline: none;
+}
+
+.timeline-content input:focus {
+    border-color: var(--blue);
+}
+
+.timeline-content button,
+.timeline-content input[type="submit"] {
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    background: var(--blue);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.timeline-content button:hover,
+.timeline-content input[type="submit"]:hover {
+    background: var(--blue-hover);
+}
+
+/* =====================================
+   MESSAGES
+===================================== */
+
+.error,
+.confirmation {
+    padding: 18px;
+    margin: 18px;
+    background: #f7f9f9;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.error {
+    border-left: 4px solid #e0245e;
+}
+
+.confirmation {
+    border-left: 4px solid #00ba7c;
+}
+
+.timeline-content > p {
+    margin: 20px;
+}
+
+/* =====================================
+   COLONNE DROITE
+===================================== */
+
+.right-sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 15px 25px;
+}
+
+.search-display {
+    background: var(--border);
+    padding: 15px 20px;
+    border-radius: 30px;
+    color: var(--gray);
+    margin-bottom: 25px;
+}
+
+.right-card {
+    background: #f7f9f9;
+    border-radius: 17px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.right-card h2 {
+    font-size: 20px;
+    margin: 0 0 12px;
+}
+
+.right-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--gray);
+}
+
+.right-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 11px 18px;
+    border-radius: 30px;
+    background: var(--text);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.right-button:hover {
+    background: #303941;
+}
+
+.right-link {
+    display: block;
+    padding: 12px 0;
+}
+
+.right-link span,
+.right-link strong {
+    display: block;
+}
+
+.right-link span {
+    font-size: 12px;
+    color: var(--gray);
+}
+
+.right-link strong {
+    margin-top: 4px;
+    font-size: 15px;
+}
+
+.right-link:hover strong {
+    text-decoration: underline;
+}
+
+.right-footer {
+    padding: 10px;
+    font-size: 12px;
+    color: var(--gray);
+}
+
+/* =====================================
+   RESPONSIVE TABLETTE
+===================================== */
+
+@media (max-width: 1100px) {
+    .twitter-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+        max-width: 900px;
+    }
+
+    .right-sidebar {
+        display: none;
+    }
+}
+
+/* =====================================
+   RESPONSIVE MOBILE
+===================================== */
+
+@media (max-width: 650px) {
+
+    .twitter-layout {
+        display: block;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        margin: 0 0 10px;
+        font-size: 20px;
+    }
+
+    .logo-symbol {
+        font-size: 27px;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        gap: 3px;
+        overflow-x: auto;
+    }
+
+    .menu a {
+        flex: 1;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .menu-icon {
+        font-size: 18px;
+        width: auto;
+    }
+
+    .tweet-button,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .timeline {
+        width: 100%;
+        border-right: none;
+    }
+
+    .timeline-header {
+        padding: 14px 16px;
+    }
+
+    .touite,
+    .timeline-content article {
+        padding: 15px 12px 15px 72px;
+    }
+
+    .touite::before,
+    .timeline-content article::before {
+        left: 12px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .timeline-content form {
+        padding: 18px 15px;
+    }
+}

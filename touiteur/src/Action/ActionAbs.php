@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\touiteur\action;
+namespace iutnc\touiteur\Action;
 
 abstract class ActionAbs{
     protected $methode_http;
