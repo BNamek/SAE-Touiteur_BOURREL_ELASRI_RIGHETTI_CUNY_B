@@ -122,5 +122,21 @@ class TouiteurRepository {
         return $res;
 
     }
+
+    public function getTouiteDetail(int $idTouite): ?array{
+        $sql = "SELECT t.id_touite, t.texte, t.date_publication, t.note, u.id_utilisateur, u.nom, u.prenom
+                FROM Touite t
+                JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
+                WHERE t.id_touite = :id";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':id' => $idTouite
+        ]);
+
+        $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $res ?: null;
+    }
 }
     
