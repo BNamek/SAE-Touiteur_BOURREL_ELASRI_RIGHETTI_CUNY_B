@@ -23,7 +23,12 @@ class PublieTouiteAction extends ActionAbs {
 
             // Insertion via le Repository
             $repo = TouiteurRepository::getInstance();
-            $repo->insertTouite($touite);
+
+            // On enregistre le touite
+            $idTouite = $repo->insertTouite($touite);
+
+            //feat8 : on enregistre les tags dans le touite
+            $repo->enregistrerTagsTouite($idTouite, $touite->getTexte());
 
             return "
                 <p style='color: green; font-weight: bold;'>Votre touite a été publié avec succès !</p>

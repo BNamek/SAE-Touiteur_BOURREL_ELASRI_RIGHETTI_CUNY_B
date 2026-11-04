@@ -3,6 +3,7 @@ namespace iutnc\touiteur\BD;
 
 use PDO;
 use iutnc\touiteur\touite\Touite;
+use iutnc\touiteur\touite\Tag;
 
 class TouiteurRepository {
 
@@ -120,9 +121,7 @@ class TouiteurRepository {
 
         $res = [];
 
-        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {
-
-            $t = new Touite($ligne['texte'],(int) $ligne['id_auteur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {$t = new Touite($ligne['texte'], (int) $ligne['id_auteur'], $ligne['date_publication'], 0, (int) $ligne['id_touite']);
 
             $t->setNom($ligne['nom']);
             $t->setPrenom($ligne['prenom']);
@@ -148,6 +147,7 @@ class TouiteurRepository {
 
         return $res ?: null;
     }
+<<<<<<< HEAD
 
     public function getTouitesParTag(string $nom):array{
         $requete = "SELECT t.id_touite, t.texte, t.date_publication, t.note, u.id_utilisateur, u.nom, u.prenom
@@ -172,4 +172,104 @@ class TouiteurRepository {
         }
         return $res;
     }
+=======
+    
+    public function getInfluenceurs(): array{
+        $sql = "SELECT  u.id_utilisateur, u.nom, u.prenom, COUNT(s.id_suiveur) AS nb_abonnes FROM Utilisateur u LEFT JOIN Suivi_Utilisateur s ON u.id_utilisateur = s.id_suivi 
+        GROUP BY u.id_utilisateur, u.nom, u.prenom ORDER BY nb_abonnes DESC LIMIT 5";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function estAbonneUtilisateur(int $idSuiveur, int $idSuivi): bool {
+        $sql = "SELECT COUNT(*) FROM Suivi_Utilisateur
+                WHERE id_suiveur = :suiveur AND id_suivi = :suivi";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+
+        return (int)$stmt->fetchColumn() > 0;
+    }
+
+    public function abonnerUtilisateur(int $idSuiveur, int $idSuivi): void{
+        $sql = "INSERT INTO Suivi_Utilisateur (id_suiveur, id_suivi)
+                VALUES (:suiveur, :suivi)";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+    }
+
+    public function desabonnerUtilisateur(int $idSuiveur, int $idSuivi): void{
+        $sql = "DELETE FROM Suivi_Utilisateur
+                WHERE id_suiveur = :suiveur
+                AND id_suivi = :suivi";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':suiveur' => $idSuiveur,
+            ':suivi'  => $idSuivi
+        ]);
+    }
+    
+    //feat8 - enregistrer les hashtags d'un touite
+    public function enregistrerTagsTouite(int $idTouite, string $texte): void {
+
+        //on recupere les hashtags du texte
+        $tags = Tag::extraireTags($texte);
+
+        foreach ($tags as $libelle) {
+
+            //on cherche si le tag existe dans la BD
+            $sql = "SELECT id_tag FROM tag WHERE libelle = :libelle";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':libelle' => $libelle
+            ]);
+
+            $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($ligne === false) {
+
+                //si le tag n'existe pas on le cree
+                $sql = "INSERT INTO tag (libelle, description_tag)
+                        VALUES (:libelle, :description)";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    ':libelle' => $libelle,
+                    ':description' => ''
+                ]);
+
+                //on recupere le nouvel identifiant
+                $idTag = (int) $this->pdo->lastInsertId();
+
+            } else {
+
+                //si le tag existe on utilise son identifiant
+                $idTag = (int) $ligne['id_tag'];
+            }
+
+            //on associe le tag au touite
+            $sql = "INSERT INTO touite_tag (id_touite, id_tag)
+                    VALUES (:touite, :tag)";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':touite' => $idTouite,
+                ':tag' => $idTag
+            ]);
+        }
+    }
+
+>>>>>>> 48a6edef61a1df517a60da9060d072f144dc3dfd
 }
