@@ -48,9 +48,9 @@ class TouiteurRepository {
     // Méthodes liées à la BD
 
     public function insertTouite(Touite $t): int {
-        $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note) 
+        $sql = "INSERT INTO Touite (texte, date_publication, id_auteur, note)
                 VALUES (:texte, :date_publication, :auteur, :note)";
-                
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':texte'            => $t->getTexte(),
@@ -67,7 +67,7 @@ class TouiteurRepository {
     public function estAbonneTag(int $idUser, int $idTag): bool {
         $sql = "SELECT COUNT(*) FROM Abonnement_Tag
                 WHERE id_utilisateur = :user AND id_tag = :tag";
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':user' => $idUser,
@@ -79,8 +79,8 @@ class TouiteurRepository {
 
     public function abonnerTag(int $idUser, int $idTag): void{
         $sql = "INSERT INTO Abonnement_Tag (id_utilisateur, id_tag)
-                VALUES (:user, :tag)"; 
-        
+                VALUES (:user, :tag)";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':user' => $idUser,
@@ -90,9 +90,9 @@ class TouiteurRepository {
 
     public function desabonnerTag(int $idUser, int $idTag): void{
         $sql = "DELETE FROM Abonnement_Tag
-                WHERE id_utilisateur = :user 
+                WHERE id_utilisateur = :user
                 AND id_tag = :tag";
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':user' => $idUser,
@@ -102,7 +102,8 @@ class TouiteurRepository {
 
     //Premiere fonctionaliter
     public function fonction1():array{
-        $requete = "select t.texte,t.id_touite,t.date_publication,t.id_auteur from touite t
+        $requete = "select t.texte,t.id_touite,t.date_publication, from touite t
+        inner join utilisateur u on t.id_auteur = u.id_utilisateur
         order by t.date_publication desc";
 
         //On met prepare pour éviter l'injection sql, donc faire des requetes préparée
@@ -139,4 +140,3 @@ class TouiteurRepository {
         return $res ?: null;
     }
 }
-    
