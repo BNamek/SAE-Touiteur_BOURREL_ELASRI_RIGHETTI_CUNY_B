@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\touiteur\action;
+namespace iutnc\touiteur\Action;
 
 use iutnc\touiteur\action\ActionAbs;
 
