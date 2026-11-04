@@ -32,6 +32,6 @@ class TouiteurUserAction extends ActionAbs{
         // Appeler le Renderer
         $renderer = new TouitesUserRenderer();
 
-        return $renderer->render($touites);
+        return $renderer->render($touites, $id);
     }
 }
