@@ -62,10 +62,8 @@ class TouiteurRepository {
     $id = (int)$this->pdo->lastInsertId();
     $t->setId($id);
     return $id;
-}
+    }
 
-
-}
     //Premiere fonctionaliter
     public function fonction1():array{
         $requete = "select t.texte,t.id_touite,t.date_publication,t.id_auteur from touite t
