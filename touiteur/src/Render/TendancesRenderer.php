@@ -13,7 +13,7 @@ class TendancesRenderer{
         $html = "<div class='right-card'>";
         $html .="<h2>Top 5 des tags</h2>";
 
-        if (empty(this->tendances)){
+        if (empty($this->tendances)){
             $html .="<p>Aucun tag trouvé</p>";
         } else {
             $html .= "<div class='tendances-list'>";
