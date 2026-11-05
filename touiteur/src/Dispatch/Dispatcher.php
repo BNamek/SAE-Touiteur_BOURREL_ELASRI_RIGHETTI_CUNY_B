@@ -126,17 +126,6 @@ class Dispatcher{
                         ⌕ &nbsp; Découvrir Touiteur
                     </div>
 
-                    <div class="right-card">
-                        <h2>Bienvenue sur Touiteur</h2>
-                        <p>
-                            Partage tes idées, découvre les
-                            publications et retrouve tes amis.
-                        </p>
-                        <a href="?action=publie-touite"
-                        class="right-button">
-                            Écrire un touite
-                        </a>
-                    </div>
 
                     <div class="right-card">
                         <h2>À découvrir</h2>
