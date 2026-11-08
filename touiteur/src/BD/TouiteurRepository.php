@@ -269,4 +269,52 @@ class TouiteurRepository {
         }
     }
 
+
+    public function getMurUtil(int $id) : array{
+        $sql = "SELECT t.id_touite, t.texte, t.date_publication, t.id_auteur, t.note, u.nom, u.prenom
+            FROM Touite t JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
+            WHERE t.id_auteur IN (SELECT s.id_suivi FROM Suivi_Utilisateur s WHERE s.id_suiveur = :idSuiveur)
+                OR t.id_touite IN (SELECT tt.id_touite FROM Touite_Tag tt JOIN Abonnement_Tag a ON tt.id_tag = a.id_tag WHERE a.id_utilisateur = :idAbonne)
+            ORDER BY t.date_publication DESC, t.id_touite DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':idSuiveur' => $id,
+            ':idAbonne' => $id
+        ]);
+
+        $touites = [];
+
+        while ($ligne = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+            $touite = new Touite(
+                $ligne['texte'],
+                (int) $ligne['id_auteur'],
+                $ligne['date_publication'],
+                (int) $ligne['note'],
+                (int) $ligne['id_touite']
+            );
+
+            $touite->setNom($ligne['nom']);
+            $touite->setPrenom($ligne['prenom']);
+
+            $touites[] = $touite;
+        }
+
+        return $touites;
+    }
+
+
+    public function getTendances(): array{
+        $sql = "SELECT t.id_tag, t.libelle, COUNT(DISTINCT tt.id_touite) AS nb_mentions
+                FROM Tag t JOIN Touite_Tag tt ON t.id_tag = tt.id_tag
+                GROUP BY t.id_tag, t.libelle ORDER BY nb_mentions ASC, libelle ASC
+                LIMIT 5";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

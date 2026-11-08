@@ -2,6 +2,7 @@
 namespace iutnc\touiteur\Dispatch;
 
 use iutnc\touiteur\Action\InfluenceursAction;
+use iutnc\touiteur\Action\TendancesAction;
 
 class Dispatcher{
     private $action;
@@ -47,6 +48,9 @@ class Dispatcher{
     private function renderPage(string $html): void{
         $actionInfluenceurs = new InfluenceursAction();
         $htmlInfluenceurs = $actionInfluenceurs->execute();
+
+        $actionTendances = new TendancesAction();
+        $htmlTendances = $actionTendances->execute();
         $title = match ($this->action) {
             'touites' => 'Fil d’actualité',
             'publie-touite' => 'Publier un touite',
@@ -122,21 +126,12 @@ class Dispatcher{
                 <aside class="right-sidebar">
                     $htmlInfluenceurs
 
+
+                    $htmlTendances
                     <div class="search-display">
                         ⌕ &nbsp; Découvrir Touiteur
                     </div>
 
-                    <div class="right-card">
-                        <h2>Bienvenue sur Touiteur</h2>
-                        <p>
-                            Partage tes idées, découvre les
-                            publications et retrouve tes amis.
-                        </p>
-                        <a href="?action=publie-touite"
-                        class="right-button">
-                            Écrire un touite
-                        </a>
-                    </div>
 
                     <div class="right-card">
                         <h2>À découvrir</h2>

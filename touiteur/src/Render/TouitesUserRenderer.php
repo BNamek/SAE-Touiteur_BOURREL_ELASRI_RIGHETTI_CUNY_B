@@ -6,7 +6,7 @@ use iutnc\touiteur\Action\TouitesUserAction;
 use iutnc\touiteur\BD\TouiteurRepository;
 
 class TouitesUserRenderer{
-    public function render(array $touites, int $idUtilisateur = 0): string{
+    public function render(array $touites, int $idUtilisateur): string{
         if (empty($touites)) {
             return "<p>Aucun touite trouvé pour cet utilisateur.</p>";
         }
@@ -35,6 +35,11 @@ class TouitesUserRenderer{
 
         // Titre
         $html = "<div style='display:flex; justify-content:space-between; align-items:center; padding:10px 0;'><h2>Touites de $prenom $nom</h2><div>$boutonSuivi</div></div>";
+
+        // Bouton permettant d'acceder au mur de l'util
+        $html .= "<a href='?action=mur&id={$idUtilisateur}' class='mur-button'>
+            Voir son mur
+          </a>";
 
         // Afficher les touites
         foreach ($touites as $touite) {
