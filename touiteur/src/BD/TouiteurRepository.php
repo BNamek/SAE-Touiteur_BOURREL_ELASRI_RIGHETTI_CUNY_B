@@ -309,7 +309,7 @@ class TouiteurRepository {
     public function getTendances(): array{
         $sql = "SELECT t.id_tag, t.libelle, COUNT(DISTINCT tt.id_touite) AS nb_mentions
                 FROM Tag t JOIN Touite_Tag tt ON t.id_tag = tt.id_tag
-                GROUP BY t.id_tag, t.libelle ORDER BY nb_mentions ASC, libelle ASC
+                GROUP BY t.id_tag, t.libelle ORDER BY nb_mentions DESC, libelle ASC
                 LIMIT 5";
 
         $stmt = $this->pdo->prepare($sql);
