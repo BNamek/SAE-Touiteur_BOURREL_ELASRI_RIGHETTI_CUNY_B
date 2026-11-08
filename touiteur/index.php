@@ -32,7 +32,7 @@ $dispatcher->addRoute('suivre-utilisateur', SuivreUtilisateurAction::class);
 $dispatcher->addRoute('mur', MurUtilisateurAction::class);
 
 //on ajoute la route qui permet d'acceder à l'action de publication d'un touite
-$dispatcher->addRoute('publier-touite',PublierTouiteAction::class);
+$dispatcher->addRoute('publier-touite',PublieTouiteAction::class);
 
 // On lance l'action demandée dans l'URL
 $dispatcher->run();
