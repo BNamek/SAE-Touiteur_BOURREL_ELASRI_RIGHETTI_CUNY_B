@@ -8,16 +8,22 @@ use iutnc\touiteur\Render\TouiteRender;
 class ListeTouiteTagAction extends ActionAbs{
 
     public function execute(): string{
-        $tag = htmlspecialchars(trim($_GET['tag']));
 
-        if(!isset($tag)){
+        if(!isset($_GET['tag'])){
             return "<h2>Le tag ne dois pas etre vide</h2>";
         }
 
+        //On met trim pour supprimer les espaces
+        $mot = trim($_GET['tag']);
+
+        $mot = strtoupper($mot);
+        $tag = '#'.$mot;
+
+
         $touiteTag = TouiteurRepository::getInstance()->getTouitesParTag($tag);
-        $html = "<h2> Les touites avec le tag : $tag </h2> <br>";
+        $html = "<h2> Les touites avec le tag : ".htmlspecialchars($tag)."</h2> <br>";
         if($touiteTag === []){
-            $html .= "Il n'y a pas de touites contenant ce tag : $tag pour le moment";
+            $html .= "Il n'y a pas de touites contenant ce tag : ".htmlspecialchars($tag)." pour le moment";
             return $html;
         }
 
