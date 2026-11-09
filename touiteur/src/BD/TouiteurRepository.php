@@ -318,4 +318,50 @@ class TouiteurRepository {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getEvaluationTouite(int $idUser, int $idTouite): ?int {
+        $stmt = $this->pdo->prepare("SELECT valeur FROM Evaluation_Touite WHERE id_utilisateur = :user AND id_touite = :touite");
+        $stmt->execute([':user' => $idUser, ':touite' => $idTouite]);
+        $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$res) {
+            return null;
+        }
+        // Gère indifféremment 'valeur' ou 'VALEUR' retourné par PDO
+        $val = $res['valeur'] ?? $res['VALEUR'] ?? null;
+        return $val !== null ? (int)$val : null;
+    }
+
+    public function evaluerTouite(int $idUser, int $idTouite, int $valeur): bool {
+        if (!in_array($valeur, [-1, 1], true)) {
+            return false;
+        }
+
+        $voteActuel = $this->getEvaluationTouite($idUser, $idTouite);
+
+        try {
+            if ($voteActuel === $valeur) {
+                // Re-clic sur le même bouton : suppression du vote et remise à zéro
+                $stmtDel = $this->pdo->prepare("DELETE FROM Evaluation_Touite WHERE id_utilisateur = :user AND id_touite = :touite");
+                $stmtDel->execute([':user' => $idUser, ':touite' => $idTouite]);
+                $diff = -$valeur;
+            } elseif ($voteActuel !== null) {
+                // Si l'utilisateur avait voté l'autre valeur
+                $stmtUpd = $this->pdo->prepare("UPDATE Evaluation_Touite SET valeur = :valeur WHERE id_utilisateur = :user AND id_touite = :touite");
+                $stmtUpd->execute([':valeur' => $valeur, ':user' => $idUser, ':touite' => $idTouite]);
+                $diff = $valeur - $voteActuel;
+            } else {
+                // Nouveau vote
+                $stmtIns = $this->pdo->prepare("INSERT INTO Evaluation_Touite (id_utilisateur, id_touite, valeur) VALUES (:user, :touite, :valeur)");
+                $stmtIns->execute([':user' => $idUser, ':touite' => $idTouite, ':valeur' => $valeur]);
+                $diff = $valeur;
+            }
+
+            $stmtMaj = $this->pdo->prepare("UPDATE Touite SET note = note + :diff WHERE id_touite = :touite");
+            $stmtMaj->execute([':diff' => $diff, ':touite' => $idTouite]);
+
+            return true;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
 }

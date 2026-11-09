@@ -867,3 +867,49 @@ textarea:focus-visible {
     color: #ef4444;
     border-color: #fca5a5;
 }
+
+/* Boutons de vote F7 */
+.btn-vote {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+.btn-like {
+    color: var(--gray);
+    background: transparent;
+}
+.btn-like:hover {
+    color: #16a34a;
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.btn-dislike {
+    color: var(--gray);
+    background: transparent;
+}
+.btn-dislike:hover {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.btn-like-active {
+    background: #16a34a !important;
+    color: white !important;
+    border-color: #16a34a !important;
+}
+
+.btn-dislike-active {
+    background: #dc2626 !important;
+    color: white !important;
+    border-color: #dc2626 !important;
+}

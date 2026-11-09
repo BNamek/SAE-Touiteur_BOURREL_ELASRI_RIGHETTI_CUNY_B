@@ -51,6 +51,23 @@ class DetailTouiteAction extends ActionAbs {
             $lienSuivi = " · <a class='{$classeSuivi}' href='?action=suivre-utilisateur&id_suivi={$idAuteur}'>{$texteSuivi}</a>";
         }
 
+        $voteActuel = $repo->getEvaluationTouite($idConnecte, $idTouite);
+        $boutonsVote = "";
+
+        if ($voteActuel === 1) {
+            // L'utilisateur a liké : on affiche que le like
+            $boutonsVote = "<a class='btn-vote btn-like-active' href='?action=evaluer-touite&id={$idTouite}&type=like' title='Cliquer pour annuler votre mention J aime'>👍</a>";
+        } elseif ($voteActuel === -1) {
+            // L'utilisateur a disliké : on affiche que le dislike
+            $boutonsVote = "<a class='btn-vote btn-dislike-active' href='?action=evaluer-touite&id={$idTouite}&type=dislike' title='Cliquer pour annuler votre mention Je n aime pas'>👎</a>";
+        } else {
+            // Aucun vote : on affiche les deux boutons neutres sans texte +1/-1
+            $boutonsVote = "
+                <a class='btn-vote btn-like' href='?action=evaluer-touite&id={$idTouite}&type=like' title='J aime'>👍</a>
+                <a class='btn-vote btn-dislike' href='?action=evaluer-touite&id={$idTouite}&type=dislike' title='Je n aime pas'>👎</a>
+            ";
+        }
+
         return "
             <article class='touite-detail'>
                 <div class='detail-header'>
@@ -67,8 +84,14 @@ class DetailTouiteAction extends ActionAbs {
 
                 <div class='detail-date'>{$date}</div>
 
-                <div class='detail-score'>
-                    <strong>{$note}</strong> évaluation(s)
+                <div class='detail-score' style='display: flex; justify-content: space-between; align-items: center;'>
+                    <div><strong>{$note}</strong> note</div>
+                    <div class='detail-score' style='display: flex; justify-content: space-between; align-items: center;'>
+                    <div><strong>{$note}</strong> note</div>
+                    <div style='display: flex; gap: 8px;'>
+                        {$boutonsVote}
+                    </div>
+                </div>
                 </div>
 
                 <div class='detail-footer'>
