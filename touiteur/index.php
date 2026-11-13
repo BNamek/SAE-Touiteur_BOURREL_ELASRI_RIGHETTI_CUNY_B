@@ -22,6 +22,7 @@ ConnectionBD::setConfig('config/db.config.ini');
 $dispatcher = new Dispatcher();
 
 $dispatcher->addRoute('default', ListeTouitesAction::class);
+$dispatcher->addRoute('touites', ListeTouitesAction::class);
 // Route de la fonctionnalites 4
 $dispatcher->addRoute('touites-user', TouiteurUserAction::class);
 $dispatcher->addRoute('publie-touite', PublieTouiteAction::class);
