@@ -3,6 +3,7 @@ namespace iutnc\touiteur\BD;
 
 use PDO;
 use iutnc\touiteur\touite\Touite;
+use iutnc\touiteur\touite\Tag;
 
 class TouiteurRepository {
 
@@ -100,7 +101,7 @@ class TouiteurRepository {
         ]);
     }
 
-    
+
     public function fonction1(): array {
 
         $requete = "SELECT
@@ -120,9 +121,7 @@ class TouiteurRepository {
 
         $res = [];
 
-        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {
-
-            $t = new Touite($ligne['texte'],(int) $ligne['id_auteur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+        while ($ligne = $rq->fetch(PDO::FETCH_ASSOC)) {$t = new Touite($ligne['texte'], (int) $ligne['id_auteur'], $ligne['date_publication'], 0, (int) $ligne['id_touite']);
 
             $t->setNom($ligne['nom']);
             $t->setPrenom($ligne['prenom']);
@@ -138,7 +137,7 @@ class TouiteurRepository {
                 FROM Touite t
                 JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
                 WHERE t.id_touite = :id";
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':id' => $idTouite
@@ -147,6 +146,40 @@ class TouiteurRepository {
         $res = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return $res ?: null;
+    }
+
+    public function getTouitesParTag(string $nom):array{
+        $requete = "SELECT t.id_touite, t.texte, t.date_publication, t.note, u.id_utilisateur, u.nom, u.prenom
+                FROM Touite t
+                INNER JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
+                INNER JOIN Touite_tag tt On t.id_touite = tt.id_touite
+                INNER JOIN Tag ta ON ta.id_tag = tt.id_tag
+                WHERE ta.libelle = :nomTag
+                ORDER BY t.date_publication DESC";
+        $prepStmt = $this->pdo->prepare($requete);
+
+        $prepStmt -> execute([':nomTag' => $nom]);
+        $res = [];
+
+        while($ligne = $prepStmt -> fetch(\PDO::FETCH_ASSOC)){
+            $t = new Touite($ligne['texte'],(int) $ligne['id_utilisateur'],$ligne['date_publication'],(int) $ligne['id_touite']);
+
+            $t->setNom($ligne['nom']);
+            $t->setPrenom($ligne['prenom']);
+
+            $res[] = $t;
+        }
+        return $res;
+    }
+
+    public function getInfluenceurs(): array{
+        $sql = "SELECT  u.id_utilisateur, u.nom, u.prenom, COUNT(s.id_suiveur) AS nb_abonnes FROM Utilisateur u LEFT JOIN Suivi_Utilisateur s ON u.id_utilisateur = s.id_suivi 
+        GROUP BY u.id_utilisateur, u.nom, u.prenom ORDER BY nb_abonnes ASC, id_utilisateur ASC LIMIT 5";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function estAbonneUtilisateur(int $idSuiveur, int $idSuivi): bool {
@@ -184,4 +217,151 @@ class TouiteurRepository {
             ':suivi'  => $idSuivi
         ]);
     }
+
+    //feat8 - enregistrer les hashtags d'un touite
+    public function enregistrerTagsTouite(int $idTouite, string $texte): void {
+
+        //on recupere les hashtags du texte
+        $tags = Tag::extraireTags($texte);
+
+        foreach ($tags as $libelle) {
+
+            //on cherche si le tag existe dans la BD
+            $sql = "SELECT id_tag FROM tag WHERE libelle = :libelle";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':libelle' => $libelle
+            ]);
+
+            $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($ligne === false) {
+
+                //si le tag n'existe pas on le cree
+                $sql = "INSERT INTO tag (libelle, description_tag)
+                        VALUES (:libelle, :description)";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    ':libelle' => $libelle,
+                    ':description' => ''
+                ]);
+
+                //on recupere le nouvel identifiant
+                $idTag = (int) $this->pdo->lastInsertId();
+
+            } else {
+
+                //si le tag existe on utilise son identifiant
+                $idTag = (int) $ligne['id_tag'];
+            }
+
+            //on associe le tag au touite
+            $sql = "INSERT INTO touite_tag (id_touite, id_tag)
+                    VALUES (:touite, :tag)";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':touite' => $idTouite,
+                ':tag' => $idTag
+            ]);
+        }
+    }
+
+
+    public function getMurUtil(int $id) : array{
+        $sql = "SELECT t.id_touite, t.texte, t.date_publication, t.id_auteur, t.note, u.nom, u.prenom
+            FROM Touite t JOIN Utilisateur u ON t.id_auteur = u.id_utilisateur
+            WHERE t.id_auteur IN (SELECT s.id_suivi FROM Suivi_Utilisateur s WHERE s.id_suiveur = :idSuiveur)
+                OR t.id_touite IN (SELECT tt.id_touite FROM Touite_Tag tt JOIN Abonnement_Tag a ON tt.id_tag = a.id_tag WHERE a.id_utilisateur = :idAbonne)
+            ORDER BY t.date_publication DESC, t.id_touite DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':idSuiveur' => $id,
+            ':idAbonne' => $id
+        ]);
+
+        $touites = [];
+
+        while ($ligne = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+            $touite = new Touite(
+                $ligne['texte'],
+                (int) $ligne['id_auteur'],
+                $ligne['date_publication'],
+                (int) $ligne['note'],
+                (int) $ligne['id_touite']
+            );
+
+            $touite->setNom($ligne['nom']);
+            $touite->setPrenom($ligne['prenom']);
+
+            $touites[] = $touite;
+        }
+
+        return $touites;
+    }
+
+
+    public function getTendances(): array{
+        $sql = "SELECT t.id_tag, t.libelle, COUNT(DISTINCT tt.id_touite) AS nb_mentions
+                FROM Tag t JOIN Touite_Tag tt ON t.id_tag = tt.id_tag
+                GROUP BY t.id_tag, t.libelle ORDER BY nb_mentions ASC, libelle ASC
+                LIMIT 5";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getEvaluationTouite(int $idUser, int $idTouite): ?int {
+        $stmt = $this->pdo->prepare("SELECT valeur FROM Evaluation_Touite WHERE id_utilisateur = :user AND id_touite = :touite");
+        $stmt->execute([':user' => $idUser, ':touite' => $idTouite]);
+        $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$res) {
+            return null;
+        }
+        // Gère indifféremment 'valeur' ou 'VALEUR' retourné par PDO
+        $val = $res['valeur'] ?? $res['VALEUR'] ?? null;
+        return $val !== null ? (int)$val : null;
+    }
+
+    public function evaluerTouite(int $idUser, int $idTouite, int $valeur): bool {
+        if (!in_array($valeur, [-1, 1], true)) {
+            return false;
+        }
+
+        $voteActuel = $this->getEvaluationTouite($idUser, $idTouite);
+
+        try {
+            if ($voteActuel === $valeur) {
+                // Re-clic sur le même bouton : suppression du vote et remise à zéro
+                $stmtDel = $this->pdo->prepare("DELETE FROM Evaluation_Touite WHERE id_utilisateur = :user AND id_touite = :touite");
+                $stmtDel->execute([':user' => $idUser, ':touite' => $idTouite]);
+                $diff = -$valeur;
+            } elseif ($voteActuel !== null) {
+                // Si l'utilisateur avait voté l'autre valeur
+                $stmtUpd = $this->pdo->prepare("UPDATE Evaluation_Touite SET valeur = :valeur WHERE id_utilisateur = :user AND id_touite = :touite");
+                $stmtUpd->execute([':valeur' => $valeur, ':user' => $idUser, ':touite' => $idTouite]);
+                $diff = $valeur - $voteActuel;
+            } else {
+                // Nouveau vote
+                $stmtIns = $this->pdo->prepare("INSERT INTO Evaluation_Touite (id_utilisateur, id_touite, valeur) VALUES (:user, :touite, :valeur)");
+                $stmtIns->execute([':user' => $idUser, ':touite' => $idTouite, ':valeur' => $valeur]);
+                $diff = $valeur;
+            }
+
+            $stmtMaj = $this->pdo->prepare("UPDATE Touite SET note = note + :diff WHERE id_touite = :touite");
+            $stmtMaj->execute([':diff' => $diff, ':touite' => $idTouite]);
+
+            return true;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
 }

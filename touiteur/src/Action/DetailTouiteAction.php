@@ -27,32 +27,76 @@ class DetailTouiteAction extends ActionAbs {
                     </div>";
         }
 
-        // Sécurisation des données avant affichage HTML
+        // Sécurisation des données avant affichage
         $texte = nl2br(htmlspecialchars($touite['texte']));
-        $auteur = htmlspecialchars($touite['prenom'] . ' ' . $touite['nom']);
+        $nom = htmlspecialchars($touite['nom']);
+        $prenom = htmlspecialchars($touite['prenom']);
+        $auteur = $prenom . ' ' . $nom;
+        $initiale = htmlspecialchars(mb_substr($prenom, 0, 1));
         $date = htmlspecialchars($touite['date_publication']);
         $note = (int)$touite['note'];
         $idAuteur = (int)$touite['id_utilisateur'];
 
-        return "
-            <article class='touite-detail' style='border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 8px;'>
-                <h2>Détail du touite</h2>
-                
-                <p style='font-size: 1.2em; font-style: italic;'>« {$texte} »</p>
-                
-                <hr>
-                
-                <p>
-                    <strong>Auteur :</strong> 
-                    <a href='?action=touites-user&id={$idAuteur}'>{$auteur}</a>
-                    | <a href='?action=suivre-utilisateur&id_suiveur=1&id_suivi={$idAuteur}'>Suivre / Ne plus suivre</a>
-                </p>
-                <p><strong>Date de publication :</strong> {$date}</p>
-                <p><strong>Score / Note :</strong> {$note}</p>
+        // Identification de l'utilisateur connecté (session ou fallback temporaire)
+        $idConnecte = $_SESSION['id_utilisateur'] 
+                      ?? filter_input(INPUT_GET, 'id_suiveur', FILTER_VALIDATE_INT) 
+                      ?? 1;
 
-                <p style='margin-top: 20px;'>
-                    <a href='?action=default'>← Retour à la liste des touites</a>
-                </p>
+        // Logique dynamique de suivi
+        $lienSuivi = "";
+        if ($idConnecte !== $idAuteur) {
+            $estAbonne = $repo->estAbonneUtilisateur($idConnecte, $idAuteur);
+            $texteSuivi = $estAbonne ? "Ne plus suivre" : "Suivre";
+            $classeSuivi = $estAbonne ? "badge-unfollow" : "badge-follow";
+            $lienSuivi = " · <a class='{$classeSuivi}' href='?action=suivre-utilisateur&id_suivi={$idAuteur}'>{$texteSuivi}</a>";
+        }
+
+        $voteActuel = $repo->getEvaluationTouite($idConnecte, $idTouite);
+        $boutonsVote = "";
+
+        if ($voteActuel === 1) {
+            // L'utilisateur a liké : on affiche que le like
+            $boutonsVote = "<a class='btn-vote btn-like-active' href='?action=evaluer-touite&id={$idTouite}&type=like' title='Cliquer pour annuler votre mention J aime'>👍</a>";
+        } elseif ($voteActuel === -1) {
+            // L'utilisateur a disliké : on affiche que le dislike
+            $boutonsVote = "<a class='btn-vote btn-dislike-active' href='?action=evaluer-touite&id={$idTouite}&type=dislike' title='Cliquer pour annuler votre mention Je n aime pas'>👎</a>";
+        } else {
+            // Aucun vote : on affiche les deux boutons neutres sans texte +1/-1
+            $boutonsVote = "
+                <a class='btn-vote btn-like' href='?action=evaluer-touite&id={$idTouite}&type=like' title='J aime'>👍</a>
+                <a class='btn-vote btn-dislike' href='?action=evaluer-touite&id={$idTouite}&type=dislike' title='Je n aime pas'>👎</a>
+            ";
+        }
+
+        return "
+            <article class='touite-detail'>
+                <div class='detail-header'>
+                    <div class='detail-avatar'>{$initiale}</div>
+                    <div class='detail-user'>
+                        <a class='detail-author' href='?action=touites-user&id={$idAuteur}'>{$auteur}</a>
+                        <span class='detail-username'>
+                            @auteur{$idAuteur} {$lienSuivi}
+                        </span>
+                    </div>
+                </div>
+
+                <div class='detail-text'>{$texte}</div>
+
+                <div class='detail-date'>{$date}</div>
+
+                <div class='detail-score' style='display: flex; justify-content: space-between; align-items: center;'>
+                    <div><strong>{$note}</strong> note</div>
+                    <div class='detail-score' style='display: flex; justify-content: space-between; align-items: center;'>
+                    <div><strong>{$note}</strong> note</div>
+                    <div style='display: flex; gap: 8px;'>
+                        {$boutonsVote}
+                    </div>
+                </div>
+                </div>
+
+                <div class='detail-footer'>
+                    <a class='detail-back' href='?action=default'>← Retour aux touites</a>
+                </div>
             </article>
         ";
     }

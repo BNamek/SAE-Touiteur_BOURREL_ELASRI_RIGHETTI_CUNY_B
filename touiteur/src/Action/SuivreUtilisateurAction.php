@@ -1,4 +1,5 @@
 <?php
+
 namespace iutnc\touiteur\Action;
 
 use iutnc\touiteur\BD\TouiteurRepository;
@@ -6,20 +7,22 @@ use iutnc\touiteur\BD\TouiteurRepository;
 class SuivreUtilisateurAction extends ActionAbs {
 
     public function execute(): string {
-        // Validation des paramètres passés en GET
-        $idSuiveur = filter_input(INPUT_GET, 'id_suiveur', FILTER_VALIDATE_INT) 
-                     ?? ($_SESSION['id_utilisateur'] ?? null);
+        // Identification du suiveur (session ou paramètre fallback)
+        $idSuiveur = $_SESSION['id_utilisateur'] 
+                     ?? filter_input(INPUT_GET, 'id_suiveur', FILTER_VALIDATE_INT) 
+                     ?? 1;
+
+        // Validation de l'auteur ciblé
         $idSuivi = filter_input(INPUT_GET, 'id_suivi', FILTER_VALIDATE_INT);
 
-        // Vérification de la validité des identifiants
-        if ($idSuiveur === false || $idSuiveur === null || $idSuivi === false || $idSuivi === null) {
+        if ($idSuivi === false || $idSuivi === null) {
             return "<div class='error'>
-                        <p>Identifiants invalides ou manquants.</p>
+                        <p>Identifiant d'auteur invalide ou manquant.</p>
                         <p><a href='?action=default'>Retour à l'accueil</a></p>
                     </div>";
         }
 
-        // Règle métier : empêcher l'auto-suivi
+        // Garde-fou : interdiction de se suivre soi-même
         if ($idSuiveur === $idSuivi) {
             return "<div class='error'>
                         <p>Vous ne pouvez pas vous suivre vous-même.</p>
@@ -29,7 +32,7 @@ class SuivreUtilisateurAction extends ActionAbs {
 
         $repo = TouiteurRepository::getInstance();
 
-        // Bascule : désabonnement si déjà suivi, abonnement sinon
+        // Bascule de l'abonnement
         if ($repo->estAbonneUtilisateur($idSuiveur, $idSuivi)) {
             $repo->desabonnerUtilisateur($idSuiveur, $idSuivi);
             $message = "Vous ne suivez plus cet utilisateur.";
@@ -38,9 +41,11 @@ class SuivreUtilisateurAction extends ActionAbs {
             $message = "Vous êtes désormais abonné à cet utilisateur !";
         }
 
-        return "<div class='confirmation'>
-                    <p style='color: green;'>{$message}</p>
-                    <p><a href='?action=default'>Retour à l'accueil</a></p>
+        return "<div class='confirmation' style='padding: 20px;'>
+                    <p style='color: #16a34a; font-weight: bold;'>{$message}</p>
+                    <p style='margin-top: 15px;'>
+                        <a class='detail-back' href='?action=default'>← Retour à l'accueil</a>
+                    </p>
                 </div>";
     }
 }

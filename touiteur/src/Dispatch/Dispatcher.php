@@ -1,6 +1,9 @@
 <?php
 namespace iutnc\touiteur\Dispatch;
 
+use iutnc\touiteur\Action\InfluenceursAction;
+use iutnc\touiteur\Action\TendancesAction;
+
 class Dispatcher{
     private $action;
     private array $route;
@@ -43,6 +46,11 @@ class Dispatcher{
     //Le parametre html c'est donc le execute qu'on vas afficher
     
     private function renderPage(string $html): void{
+        $actionInfluenceurs = new InfluenceursAction();
+        $htmlInfluenceurs = $actionInfluenceurs->execute();
+
+        $actionTendances = new TendancesAction();
+        $htmlTendances = $actionTendances->execute();
         $title = match ($this->action) {
             'touites' => 'Fil d’actualité',
             'publie-touite' => 'Publier un touite',
@@ -78,11 +86,6 @@ class Dispatcher{
                             Accueil
                         </a>
 
-                        <a href="?action=touites">
-                            <span class="menu-icon">⌕</span>
-                            Explorer
-                        </a>
-
                         <a href="?action=publie-touite">
                             <span class="menu-icon">✎</span>
                             Nouveau touite
@@ -116,30 +119,12 @@ class Dispatcher{
 
                 <!-- COLONNE DROITE -->
                 <aside class="right-sidebar">
+                    $htmlInfluenceurs
+
+
+                    $htmlTendances
                     <div class="search-display">
                         ⌕ &nbsp; Découvrir Touiteur
-                    </div>
-
-                    <div class="right-card">
-                        <h2>Bienvenue sur Touiteur</h2>
-                        <p>
-                            Partage tes idées, découvre les
-                            publications et retrouve tes amis.
-                        </p>
-                        <a href="?action=publie-touite"
-                        class="right-button">
-                            Écrire un touite
-                        </a>
-                    </div>
-
-                    <div class="right-card">
-                        <h2>À découvrir</h2>
-
-                        <a href="?action=touites"
-                        class="right-link">
-                            <span>Publications</span>
-                            <strong>Voir les touites</strong>
-                        </a>
                     </div>
 
                     <p class="right-footer">
