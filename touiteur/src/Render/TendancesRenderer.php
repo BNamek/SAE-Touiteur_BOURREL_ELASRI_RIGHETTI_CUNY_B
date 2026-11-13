@@ -20,12 +20,12 @@ class TendancesRenderer{
 
             foreach ($this->tendances as $tendance) {
                 $tag = htmlspecialchars($tendance['libelle'], ENT_QUOTES, 'UTF-8');
-
+                $tag = ltrim($tag,'#');
                 $nbMentions = (int) $tendance['nb_mentions'];
 
                 $html .= "
                     <div class='tendance'>
-                        <strong>#$tag</strong>
+                        <a href=?action=tag&tag=$tag><strong>#$tag</strong></a>
                         <span>$nbMentions mentions</span>
                     </div>";
             }
