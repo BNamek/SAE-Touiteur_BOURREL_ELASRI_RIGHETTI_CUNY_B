@@ -11,33 +11,33 @@ Enfin, nous avons fait les fonctionnalités suivantes :
 
 Ugo :
   
-  6. Publier un touite   
+  6 Publier un touite   
   
-  8. La gestion des tags
+  8 La gestion des tags
 
 Robin :
  
-  4. Afficher les touites d'une personne donnée (accès via le clic sur un auteur)  
+  4 Afficher les touites d'une personne donnée (accès via le clic sur un auteur)  
   
-  9. Le mur d'un utilisateur (page d'accueil regroupant les suivis et tags abonnés en ordre chronologique inverse)   
+  9 Le mur d'un utilisateur (page d'accueil regroupant les suivis et tags abonnés en ordre chronologique inverse)   
   
-  14 / 15. Partie administration / rentabilisation (Affichage des influenceurs et des tendances) (comme pas d'authenfication affichage sur la page d'accueil et limitation a 5)
+  14 / 15 Partie administration / rentabilisation (Affichage des influenceurs et des tendances) (comme pas d'authenfication affichage sur la page d'accueil et limitation a 5)
 
 Rayan :
   
-  1. Afficher la liste des touites (en ordre chronologique inverse, version courte)
+  1 Afficher la liste des touites (en ordre chronologique inverse, version courte)
   
-  3. Paginer la liste des touites
+  3 Paginer la liste des touites
   
-  5. Afficher les touites associés à un tag donné
+  5 Afficher les touites associés à un tag donné
 
 Matteo :
   
-  2. Afficher un touite en détail 
+  2 Afficher un touite en détail 
   
-  7. Évaluer un touite 
+  7 Évaluer un touite 
   
-  10 / 11. S'abonner à un tag et s'abonner a un utilisateur
+  10 / 11 S'abonner à un tag et s'abonner a un utilisateur
 
 
 Lien web-etu : https://webetu.iutnc.univ-lorraine.fr/~e55489u/touiteur/index.php
