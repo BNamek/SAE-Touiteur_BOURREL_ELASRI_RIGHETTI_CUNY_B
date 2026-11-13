@@ -127,17 +127,6 @@ class Dispatcher{
                         ⌕ &nbsp; Découvrir Touiteur
                     </div>
 
-
-                    <div class="right-card">
-                        <h2>À découvrir</h2>
-
-                        <a href="?action=touites"
-                        class="right-link">
-                            <span>Publications</span>
-                            <strong>Voir les touites</strong>
-                        </a>
-                    </div>
-
                     <p class="right-footer">
                         Touiteur.app · SAE BUT Informatique
                     </p>
