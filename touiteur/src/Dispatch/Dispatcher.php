@@ -86,11 +86,6 @@ class Dispatcher{
                             Accueil
                         </a>
 
-                        <a href="?action=touites">
-                            <span class="menu-icon">⌕</span>
-                            Explorer
-                        </a>
-
                         <a href="?action=publie-touite">
                             <span class="menu-icon">✎</span>
                             Nouveau touite

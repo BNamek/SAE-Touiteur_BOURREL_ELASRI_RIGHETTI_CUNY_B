@@ -21,12 +21,11 @@ ConnectionBD::setConfig('config/db.config.ini');
 // Création du Dispatcher
 $dispatcher = new Dispatcher();
 
-$dispatcher->addRoute('default', DefaultAction::class);
+$dispatcher->addRoute('default', ListeTouitesAction::class);
 // Route de la fonctionnalites 4
 $dispatcher->addRoute('touites-user', TouiteurUserAction::class);
 $dispatcher->addRoute('publie-touite', PublieTouiteAction::class);
 $dispatcher->addRoute('abonnement-tag', AbonnementTagAction::class);
-$dispatcher->addRoute('touites',ListeTouitesAction::class);
 $dispatcher->addRoute('detail-touite', DetailTouiteAction::class);
 $dispatcher->addRoute('tag', ListeTouiteTagAction::class);
 $dispatcher->addRoute('suivre-utilisateur', SuivreUtilisateurAction::class);
